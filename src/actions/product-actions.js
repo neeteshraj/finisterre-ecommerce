@@ -1,24 +1,17 @@
 import axiosInstance from "../helpers/axios";
 import { productConstants } from "./constants";
 
-
-const addProduct = (form) => {
-    return async (dispatch) => {
-        dispatch({ 
-            type: productConstants.ADD_PRODUCT_REQUEST 
-        });
-        const res = await axiosInstance.post(`/product/createproduct`, form,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        if (res.status === 200) {
-          dispatch({ type: productConstants.ADD_PRODUCT_SUCCESS });;
-        } else {
-          dispatch({ type: productConstants.ADD_PRODUCT_FAILURE });
+export const getProductsBySlug = (slug) =>{
+    return async dispatch => {
+        const res = await axiosInstance.get(`/product/${slug}`);
+        if(res.status===200){
+            dispatch({
+                type: productConstants.GET_PRODUCTS_BY_SLUG,
+                payload: res.data
+            })
         }
-      
-    };
-  };
-
-export default addProduct;
+        else{
+            console.log("error");
+        }
+    }
+}
